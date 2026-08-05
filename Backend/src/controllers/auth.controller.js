@@ -31,7 +31,15 @@ async function registerUser(req,res){
         role:user.role,
     },process.env.JWT_SECRET)
 
-    res.cookie("token",token)
+    res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite:
+            process.env.NODE_ENV === "production"
+            ? "none"
+            : "lax",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        });
 
     res.status(201).json({
         message:"User registered successfully",
@@ -66,7 +74,15 @@ async function loginUser(req,res){
         role:user.role,
     },process.env.JWT_SECRET)
 
-    res.cookie("token",token);
+    res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite:
+            process.env.NODE_ENV === "production"
+            ? "none"
+            : "lax",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        });
     res.status(200).json({
         message:"User logged in successfully",
         user:{
@@ -79,8 +95,18 @@ async function loginUser(req,res){
 
 }
 
-async function logoutUser(req,res){
-    res.clearCookie("token")
-    res.status(200).json({ message: "User logged out successfully"})
+async function logoutUser(req, res) {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite:
+      process.env.NODE_ENV === "production"
+        ? "none"
+        : "lax",
+  });
+
+  res.status(200).json({
+    message: "User logged out successfully",
+  });
 }
 module.exports={ registerUser ,loginUser,logoutUser}
