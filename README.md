@@ -1,1 +1,1 @@
-music-flow-kappa.vercel.app
+https://music-flow-kappa.vercel.app/login
